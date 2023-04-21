@@ -3,9 +3,9 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { AiOutlinePlayCircle, AiOutlinePauseCircle } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
-import { Knob } from "react-rotary-knob";
+const { Knob } = require("react-rotary-knob");
 import skin from "../skins/s12";
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,7 +33,7 @@ let audioBuffers: AudioBuffer[] = [];
 let audioBuffer: AudioBuffer;
 
 let writePointer: number;
-let socket: SocketIOClient.Socket;
+let socket: Socket;
 let firstPlay = true;
 const inter = Inter({ subsets: ['latin'] })
 const initialActive: number[] = []
@@ -79,7 +79,9 @@ const graphOptions = {
 
     },
   },
-  animation: false,
+  animation: {
+    duration: 0
+  },
 };
 
 export default function Home() {
@@ -97,8 +99,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+    audioContext = new (window.AudioContext)();
     // connect without CORS
     socket = io('http://127.0.0.1:5001/')
     socket.on('connect', () => {
@@ -156,17 +157,13 @@ export default function Home() {
 
     socket.on("finished", () => {
       console.log("FINISHED")
-      if (motivation < 2) {
-        setMotivation(0)
-        setLenaText("This is too tough. I will give up now.")
-      }
-      else if (confidence > 98) {
+      console.log(confidences, motivation)
+      if (confidences[confidences.length - 1] > 95) {
         setConfidence(100)
         setLenaText("I am a great singer! I am done learning.")
-
-      }
-      else {
-        setLenaText("I am done learning for now.")
+      } else if (motivations[motivations.length - 1] < 5) {
+        setLenaText("This is too tough. I will give up now.")
+        setMotivation(0)
 
       }
 

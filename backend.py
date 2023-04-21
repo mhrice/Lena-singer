@@ -21,7 +21,8 @@ import soundfile as sf
 import shutil
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, static_folder="../build", static_url_path="/")
 app.debug = True
 app.secret_key = "random secret key!"
 CORS(app)
@@ -131,11 +132,11 @@ def stream_audio(data):
                 },
             )
             time.sleep(0.5)
-            sf.write(
-                f"./web/public/audio/{time_step}.wav",
-                audio,
-                hps.data.sample_rate,
-            )
+            # sf.write(
+            #     f"./web/public/audio/{time_step}.wav",
+            #     audio,
+            #     hps.data.sample_rate,
+            # )
 
 
 @socketio.on("next_song")
