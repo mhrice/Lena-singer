@@ -1,0 +1,11 @@
+data/
+__pycache__
+outputs/
+env/
+.DS_Store
+ckpt/
+exp.ipynb
+inference/
+neutone_out/
+.ipynb_checkpoints/
+learner_outputs/

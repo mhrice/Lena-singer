@@ -1,0 +1,29 @@
+1. Setup Device
+Use GPU with Google Cloud ML (so it installs nvidia drivers)
+
+2. SSH
+gcloud compute ssh --zone "us-west1-b" "visinger-a100-vm"  --project "audio-ml-375919"
+
+
+3. Install Dependencies
+git clone https://github.com/zhangyongmao/VISinger2.git
+git clone https://github.com/mayk-it/audio-ml.git
+
+sudo apt-get install libsndfile1 libsndfile1-dev
+
+pip install librosa==0.8.1 tqdm tensorboard ipython gdown soundfile pyworld torch
+gdown 1NdFoZICsU8V56M33c0S1OBh4w6cn8T0v
+unzip swift-opencpop.zip
+rm -rf VISinger2/data/opencpop/
+cp opencpop VISinger2/data/ -r
+cp audio-ml/projects/singing-database-creation/symbols.py VISinger2/text/npu/symbols.py
+cp audio-ml/projects/singing-database-creation/config.json VISinger2/egs/visinger/config.json
+# Replace username in config.json
+sed -i 's@USER@'"$USER"'@' config.json
+
+4. Preprocess
+cd VISinger2/egs/visinger
+bash bash/preprocess.sh config.json (In the future, this step may not be needed as the zip file will contain the preprocessed data)
+
+5. Train
+bash bash/train.sh 0
