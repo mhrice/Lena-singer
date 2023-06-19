@@ -102,8 +102,7 @@ export default function Home() {
     audioContext = new (window.AudioContext)();
     // connect without CORS
     // socket = io('http://127.0.0.1:5001/')
-    // socket = io("https://shark-app-d3sut.ondigitalocean.app/")
-    socket = io("https://shark-app-d3sut.ondigitalocean.app")
+    socket = io("https://oyster-app-erbai.ondigitalocean.app/")
 
     socket.on('connect', () => {
       console.log('Successfully connected!');
